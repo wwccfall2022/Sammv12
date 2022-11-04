@@ -77,3 +77,44 @@ CREATE TABLE items (
     	damage INT UNSIGNED DEFAULT 0
 );
 
+
+CREATE TABLE inventory (
+	inventory_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	character_id INT UNSIGNED NOT NULL,
+    	item_id INT UNSIGNED NOT NULL,
+    
+	CONSTRAINT inventory_fk_characters
+		FOREIGN KEY (character_id)
+		REFERENCES characters (character_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,
+        
+	CONSTRAINT inventory_fk_items
+		FOREIGN KEY (item_id)
+		REFERENCES items (item_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+);
+
+
+CREATE TABLE equipped (
+	equipped_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	character_id INT UNSIGNED NOT NULL,
+   	item_id INT UNSIGNED NOT NULL,
+    
+	CONSTRAINT equipped_fk_characters
+		FOREIGN KEY (character_id)
+		REFERENCES characters (character_id)
+        	ON UPDATE CASCADE
+       		ON DELETE CASCADE,
+        
+	CONSTRAINT equipped_fk_items
+		FOREIGN KEY (item_id)
+		REFERENCES items (item_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+);
+
+
+
+
