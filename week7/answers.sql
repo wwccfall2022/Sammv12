@@ -46,3 +46,34 @@ CREATE TABLE character_stats (
         	ON DELETE CASCADE
 );
 
+CREATE TABLE teams (
+	team_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    	name VARCHAR(30) NOT NULL
+);
+
+
+CREATE TABLE team_members (
+	team_member_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	team_id INT UNSIGNED NOT NULL,
+    	character_id INT UNSIGNED NOT NULL,
+	
+    	CONSTRAINT team_members_fk_teams
+		FOREIGN KEY (team_id)
+		REFERENCES teams (team_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,
+        
+	CONSTRAINT team_members_fk_characters
+		FOREIGN KEY (character_id)
+		REFERENCES characters (character_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+);
+
+CREATE TABLE items (
+	item_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    	name VARCHAR(30) NOT NULL,
+    	armor INT UNSIGNED DEFAULT 0,
+    	damage INT UNSIGNED DEFAULT 0
+);
+
