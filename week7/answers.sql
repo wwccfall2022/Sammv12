@@ -116,5 +116,12 @@ CREATE TABLE equipped (
 );
 
 
-
+CREATE OR REPLACE VIEW character_items AS
+	SELECT c.character_id, c.name AS character_name, i.name AS item_name, i.armor , i.damage
+    FROM characters c
+    INNER JOIN inventory iv
+    ON c.character_id = iv.character_id
+    INNER JOIN items i
+    ON iv.item_id = i.item_id
+    ORDER BY character_name, item_name ASC;
 
