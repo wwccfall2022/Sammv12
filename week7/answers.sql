@@ -172,7 +172,7 @@ DELIMITER ;;
 	FROM character_stats 
     WHERE character_id = id;
   
-    SELECT i.armor INTO equipped_armor 
+    SELECT SUM(i.armor) INTO equipped_armor 
     FROM items i
 	LEFT OUTER JOIN equipped e
 	ON e.item_id = i.item_id
