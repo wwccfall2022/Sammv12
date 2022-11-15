@@ -158,3 +158,25 @@ CREATE OR REPLACE VIEW character_items AS
     ON e.item_id = i.item_id 
 	ORDER BY team_name, item_name ASC;
      
+     
+DELIMITER ;;
+	CREATE FUNCTION armor_total(id INT UNSIGNED)
+	RETURNS INT UNSIGNED 
+	DETERMINISTIC 
+	BEGIN
+	DECLARE total_armor INT UNSIGNED;
+    
+	SELECT COUNT(cs.armor + i.armor) INTO total_armor
+    	FROM character_stats cs
+    	LEFT JOIN items i
+    	ON cs.armor = i.armor
+    	LEFT OUTER JOIN equipped e
+    	ON e.item_id = i.item_id
+	WHERE cs.character_id = 1
+    	GROUP BY cs.character_id;
+    
+    	RETURN total_armor;
+
+	END;; 
+
+DELIMITER ;
