@@ -172,7 +172,7 @@ DELIMITER ;;
     	ON cs.armor = i.armor
     	LEFT OUTER JOIN equipped e
     	ON e.item_id = i.item_id
-	WHERE cs.character_id = 1
+	WHERE cs.character_id = id
     	GROUP BY cs.character_id;
     
     	RETURN total_armor;
