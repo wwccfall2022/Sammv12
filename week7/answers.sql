@@ -163,18 +163,22 @@ DELIMITER ;;
 	CREATE FUNCTION armor_total(id INT UNSIGNED)
 	RETURNS INT UNSIGNED 
 	DETERMINISTIC 
-	BEGIN
+	BEGIN 
+    DEClARE character_armor INT UNSIGNED;
+    DEClARE equipped_armor INT UNSIGNED;
 	DECLARE total_armor INT UNSIGNED;
     
-	SELECT COUNT(cs.armor + i.armor) INTO total_armor
-    	FROM character_stats cs
-    	LEFT JOIN items i
-    	ON cs.armor = i.armor
-    	LEFT OUTER JOIN equipped e
-    	ON e.item_id = i.item_id
-	WHERE cs.character_id = id
-    	GROUP BY cs.character_id;
-    
+	SELECT armor  INTO character_armor
+	FROM character_stats 
+    WHERE character_id = id;
+  
+    SELECT i.armor INTO equipped_armor 
+    FROM items i
+	LEFT OUTER JOIN equipped e
+	ON e.item_id = i.item_id
+	WHERE e.character_id = id;
+    	
+    SET total_armor = character_armor + equipped_armor;
     	RETURN total_armor;
 
 	END;; 
