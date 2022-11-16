@@ -36,7 +36,7 @@ CREATE TABLE winners (
 
 CREATE TABLE character_stats (
 	character_id INT UNSIGNED NOT NULL PRIMARY KEY,
-	health INT UNSIGNED DEFAULT 0,
+	health INT DEFAULT 0,
     	armor INT UNSIGNED DEFAULT 0,
 	
     	CONSTRAINT character_stats_fk_characters
