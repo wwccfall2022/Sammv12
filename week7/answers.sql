@@ -192,7 +192,7 @@ CREATE PROCEDURE attack(attacked_character_id INT UNSIGNED, equipped_id INT UNSI
 BEGIN
 DECLARE armor INT UNSIGNED;
 DECLARE damage INT UNSIGNED;
-DECLARE total_damage INT UNSIGNED;
+DECLARE total_damage INT;
 DECLARE new_health INT;
 DECLARE total_health INT;
 
