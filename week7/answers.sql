@@ -184,3 +184,49 @@ DELIMITER ;;
 	END;; 
 
 DELIMITER ;
+
+
+DELIMITER ;;
+CREATE PROCEDURE attack(attacked_character_id INT UNSIGNED, equipped_id INT UNSIGNED)
+
+BEGIN
+DECLARE armor INT UNSIGNED;
+DECLARE damage INT UNSIGNED;
+DECLARE total_damage INT UNSIGNED;
+DECLARE new_health INT;
+DECLARE total_health INT;
+
+
+SELECT armor_total(attacked_character_id) INTO armor;
+
+SELECT i.damage INTO damage 
+    FROM items i
+	INNER JOIN equipped e
+	ON e.item_id = i.item_id
+	WHERE e.equipped_id = equipped_id;
+
+SET total_damage = damage - armor;
+
+
+SELECT health INTO new_health
+    FROM character_stats
+    WHERE character_id = attacked_character_id ;
+
+
+IF total_damage >0 THEN 
+	
+    SET total_health = new_health - total_damage;
+    UPDATE character_stats SET health = total_health WHERE character_id = attacked_character_id;
+    
+    IF  total_damage >= new_health THEN
+	DELETE FROM characters WHERE character_id = attacked_character_id;
+    END IF;
+END IF;
+
+
+END;
+
+DELIMITER ;
+
+
+
