@@ -273,13 +273,13 @@ WHERE item_id = item;
 
 SELECT character_id INTO id_character
 FROM equipped
-WHERE equipped_id = item_inventory_id;
+WHERE equipped_id = item_equipped_id;
 
 SELECT character_id INTO new_character
 FROM characters 
 WHERE character_id = id_character;
 
-DELETE FROM equipped WHERE equipped_id = item_inventory_id;
+DELETE FROM equipped WHERE equipped_id = item_equipped_id;
 
 
 INSERT INTO inventory (character_id, item_id) VALUES (new_character,new_item );
