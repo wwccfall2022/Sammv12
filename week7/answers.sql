@@ -256,6 +256,41 @@ INSERT INTO equipped (character_id, item_id) VALUES (new_character, new_item);
 END;;
 
 
+CREATE PROCEDURE unequip (item_equipped_id INT UNSIGNED)
+BEGIN
+DECLARE item INT UNSIGNED;
+DECLARE id_character INT UNSIGNED;
+DECLARE new_item INT UNSIGNED;
+DECLARE new_character INT UNSIGNED;
+
+SELECT item_id INTO item
+FROM equipped
+WHERE equipped_id = item_equipped_id;
+
+SELECT item_id INTO new_item
+FROM items 
+WHERE item_id = item;
+
+SELECT character_id INTO id_character
+FROM equipped
+WHERE equipped_id = item_inventory_id;
+
+SELECT character_id INTO new_character
+FROM characters 
+WHERE character_id = id_character;
+
+DELETE FROM equipped WHERE equipped_id = item_inventory_id;
+
+
+INSERT INTO inventory (character_id, item_id) VALUES (new_character,new_item );
+
+
+END;;
+
+
+
+
+
 DELIMITER ;
 
 
