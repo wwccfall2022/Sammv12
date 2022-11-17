@@ -226,6 +226,29 @@ END IF;
 
 END;;
 
+
+CREATE PROCEDURE equip (item_inventory_id INT UNSIGNED)
+BEGIN
+DECLARE item INT UNSIGNED;
+DECLARE character_id INT UNSIGNED;
+
+SELECT item_id INTO item
+FROM inventory
+WHERE inventory_id = item_inventory_id;
+
+SELECT character_id INTO character_id
+FROM inventory
+WHERE inventory_id = item_inventory_id;
+
+DELETE FROM inventory WHERE inventory_id = item_inventory_id;
+
+INSERT INTO equipped VALUES (character_id, item);
+
+
+END;;
+
+
+
 DELIMITER ;
 
 
