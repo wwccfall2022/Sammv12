@@ -230,24 +230,21 @@ END;;
 CREATE PROCEDURE equip (item_inventory_id INT UNSIGNED)
 BEGIN
 DECLARE item INT UNSIGNED;
-DECLARE character_id INT UNSIGNED;
+DECLARE id_character INT UNSIGNED;
 
 SELECT item_id INTO item
 FROM inventory
 WHERE inventory_id = item_inventory_id;
 
-SELECT character_id INTO character_id
+SELECT character_id INTO id_character
 FROM inventory
 WHERE inventory_id = item_inventory_id;
 
 DELETE FROM inventory WHERE inventory_id = item_inventory_id;
 
-INSERT INTO equipped VALUES (character_id, item);
-
+INSERT INTO equipped (character_id, item_id) VALUES (item, id_character);
 
 END;;
-
-
 
 DELIMITER ;
 
