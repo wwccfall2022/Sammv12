@@ -237,7 +237,7 @@ SELECT item_id INTO item
 FROM inventory
 WHERE inventory_id = item_inventory_id;
 
-SELECT item_id INTO new_item
+SELECT item_id INTO id_character
 FROM items 
 WHERE item_id = item;
 
