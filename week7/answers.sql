@@ -252,7 +252,7 @@ WHERE character_id = id_character;
 
 DELETE FROM inventory WHERE inventory_id = item_inventory_id;
 
-INSERT INTO equipped (character_id, item_id) VALUES (new_item, new_character );
+INSERT INTO equipped (character_id, item_id) VALUES (new_character, new_item);
 
 
 END;;
