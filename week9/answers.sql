@@ -37,7 +37,7 @@ CREATE TABLE friends (
         	ON UPDATE CASCADE
         	ON DELETE CASCADE,
         
-	CONSTRAINT friends_fk_users
+	CONSTRAINT friends_fk_friendusers
 		FOREIGN KEY (friend_id)
 		REFERENCES users(user_id)
         	ON UPDATE CASCADE
