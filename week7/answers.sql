@@ -300,7 +300,7 @@ DECLARE row_not_found TINYINT DEFAULT FALSE;
 
 DECLARE team_cursor CURSOR FOR
 SELECT c.character_id, c.name
-FROM teams t
+FROM team_members t
 INNER JOIN characters c
 ON t.character_id = c.character_id
 WHERE t.team_id = id_team;
