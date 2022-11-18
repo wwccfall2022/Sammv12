@@ -19,7 +19,7 @@ CREATE TABLE sessions (
 	
 	CONSTRAINT sessions_fk_users
 		FOREIGN KEY (user_id)
-		REFERENCES users (user_id)
+		REFERENCES users(user_id)
         	ON UPDATE CASCADE
         	ON DELETE CASCADE
 );
@@ -53,7 +53,7 @@ CREATE TABLE posts (
 	
 	CONSTRAINT posts_fk_users
 		FOREIGN KEY (user_id)
-		REFERENCES users (user_id)
+		REFERENCES users(user_id)
         	ON UPDATE CASCADE
         	ON DELETE CASCADE
 );
@@ -65,7 +65,7 @@ CREATE TABLE notifications (
 	
 	CONSTRAINT notifications_fk_users
 		FOREIGN KEY (user_id)
-		REFERENCES users (user_id)
+		REFERENCES users(user_id)
         	ON UPDATE CASCADE
         	ON DELETE CASCADE,
         
