@@ -58,3 +58,41 @@ CREATE TABLE posts (
         	ON UPDATE CASCADE
         	ON DELETE CASCADE
 );
+
+
+CREATE TABLE notifications (
+	notification_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	user_id INT UNSIGNED NOT NULL,
+	post_id INT UNSIGNED NOT NULL,
+	
+	CONSTRAINT notifications_fk_users
+		FOREIGN KEY (user_id)
+		REFERENCES users(user_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,
+        
+	CONSTRAINT notifications_fk_posts
+		FOREIGN KEY (post_id)
+		REFERENCES posts(post_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+);
+
+
+CREATE TABLE notifications (
+	notification_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	user_id INT UNSIGNED NOT NULL,
+	post_id INT UNSIGNED NOT NULL,
+	
+	CONSTRAINT notifications_fk_users
+		FOREIGN KEY (user_id)
+		REFERENCES users(user_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE,
+        
+	CONSTRAINT notifications_fk_posts
+		FOREIGN KEY (post_id)
+		REFERENCES posts(post_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+);
