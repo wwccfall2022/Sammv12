@@ -36,10 +36,25 @@ CREATE TABLE friends (
 		REFERENCES users(user_id)
         	ON UPDATE CASCADE
         	ON DELETE CASCADE,
-        
+  -- I added thr name of the contrain frienduser because it keep giving me and erro arbout repiting a constrain but this constraint refers to the user table      
 	CONSTRAINT friends_fk_friendusers
 		FOREIGN KEY (friend_id)
 		REFERENCES users(user_id)
+        	ON UPDATE CASCADE
+        	ON DELETE CASCADE
+);
+
+
+CREATE TABLE posts (
+	post_id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	user_id INT UNSIGNED NOT NULL,
+	created_on TIMESTAMP NOT NULL DEFAULT NOW(),
+	updated_on TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    content VARCHAR(100) NOT NULL,
+	
+	CONSTRAINT posts_fk_users
+		FOREIGN KEY (user_id)
+		REFERENCES users (user_id)
         	ON UPDATE CASCADE
         	ON DELETE CASCADE
 );
