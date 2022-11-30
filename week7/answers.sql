@@ -119,43 +119,43 @@ CREATE TABLE equipped (
 CREATE OR REPLACE VIEW character_items AS
 	SELECT c.character_id, c.name AS character_name, i.name AS item_name, i.armor , i.damage
 	FROM characters c
-    INNER JOIN inventory iv
-    ON c.character_id = iv.character_id
-    INNER JOIN items i
-    ON iv.item_id = i.item_id
-    UNION 
-    SELECT c.character_id, c.name AS character_name, i.name AS item_name, i.armor , i.damage
-    FROM characters c
-    INNER JOIN equipped e
-    ON c.character_id = e.character_id
-    INNER JOIN items i
-    ON e.item_id = i.item_id 
-     ORDER BY character_name, item_name ASC;
+    		INNER JOIN inventory iv
+    		ON c.character_id = iv.character_id
+    		INNER JOIN items i
+    		ON iv.item_id = i.item_id
+   	UNION 
+    	SELECT c.character_id, c.name AS character_name, i.name AS item_name, i.armor , i.damage
+    	FROM characters c
+    		INNER JOIN equipped e
+    		ON c.character_id = e.character_id
+    		INNER JOIN items i
+    		ON e.item_id = i.item_id 
+     	ORDER BY character_name, item_name ASC;
      
      
      
   CREATE OR REPLACE VIEW team_items AS
 	SELECT t.team_id, t.name AS team_name, i.name AS item_name, i.armor , i.damage
 	FROM teams t
-    INNER JOIN team_members te
-    ON t.team_id = te.team_id
-    INNER JOIN characters c
-    ON c.character_id = te.character_id
-    INNER JOIN inventory iv
-    ON c.character_id = iv.character_id
-    INNER JOIN items i
-    ON iv.item_id = i.item_id
-    UNION 
-    SELECT t.team_id, t.name AS team_name, i.name AS item_name, i.armor , i.damage
-    FROM teams t
-    INNER JOIN team_members te
-    ON t.team_id = te.team_id
-    INNER JOIN characters c
-    ON c.character_id = te.character_id
-    INNER JOIN equipped e
-    ON c.character_id = e.character_id
-    INNER JOIN items i
-    ON e.item_id = i.item_id 
+    		INNER JOIN team_members te
+    		ON t.team_id = te.team_id
+    		INNER JOIN characters c
+    		ON c.character_id = te.character_id
+    		INNER JOIN inventory iv
+    		ON c.character_id = iv.character_id
+    		INNER JOIN items i
+    		ON iv.item_id = i.item_id
+    	UNION 
+    	SELECT t.team_id, t.name AS team_name, i.name AS item_name, i.armor , i.damage
+    	FROM teams t
+    		INNER JOIN team_members te
+    		ON t.team_id = te.team_id
+    		INNER JOIN characters c
+    		ON c.character_id = te.character_id
+    		INNER JOIN equipped e
+    		ON c.character_id = e.character_id
+    		INNER JOIN items i
+    		ON e.item_id = i.item_id 
 	ORDER BY team_name, item_name ASC;
      
      
@@ -190,38 +190,38 @@ DELIMITER ;;
 CREATE PROCEDURE attack(attacked_character_id INT UNSIGNED, equipped_id INT UNSIGNED)
 
 BEGIN
-DECLARE armor INT UNSIGNED;
-DECLARE damage INT UNSIGNED;
-DECLARE total_damage INT;
-DECLARE new_health INT;
-DECLARE total_health INT;
+	DECLARE armor INT UNSIGNED;
+	DECLARE damage INT UNSIGNED;
+	DECLARE total_damage INT;
+	DECLARE new_health INT;
+	DECLARE total_health INT;
 
 
-SELECT armor_total(attacked_character_id) INTO armor;
+	SELECT armor_total(attacked_character_id) INTO armor;
 
-SELECT i.damage INTO damage 
-    FROM items i
-	INNER JOIN equipped e
-	ON e.item_id = i.item_id
+	SELECT i.damage INTO damage 
+    	FROM items i
+		INNER JOIN equipped e
+		ON e.item_id = i.item_id
 	WHERE e.equipped_id = equipped_id;
 
-SET total_damage = damage - armor;
+	SET total_damage = damage - armor;
 
 
-SELECT health INTO new_health
-    FROM character_stats
-    WHERE character_id = attacked_character_id ;
+	SELECT health INTO new_health
+    	FROM character_stats
+    	WHERE character_id = attacked_character_id ;
 
 
-IF total_damage >0 THEN 
+	IF total_damage >0 THEN 
 	
-    SET total_health = new_health - total_damage;
-    UPDATE character_stats SET health = total_health WHERE character_id = attacked_character_id;
+    		SET total_health = new_health - total_damage;
+    		UPDATE character_stats SET health = total_health WHERE character_id = attacked_character_id;
     
-    IF  total_damage >= new_health THEN
-	DELETE FROM characters WHERE character_id = attacked_character_id;
-    END IF;
-END IF;
+    		IF  total_damage >= new_health THEN
+			DELETE FROM characters WHERE character_id = attacked_character_id;
+    		END IF;
+	END IF;
 
 
 END;;
@@ -229,47 +229,36 @@ END;;
 
 CREATE PROCEDURE equip (item_inventory_id INT UNSIGNED)
 BEGIN
-DECLARE item INT UNSIGNED;
-DECLARE id_character INT UNSIGNED;
+	DECLARE item INT UNSIGNED;
+	DECLARE id_character INT UNSIGNED;
 
 
-SELECT character_id, item_id INTO id_character, item
-    FROM inventory
-    WHERE inventory_id = item_inventory_id;
+	SELECT character_id, item_id INTO id_character, item
+    	FROM inventory
+    	WHERE inventory_id = item_inventory_id;
 
-DELETE FROM inventory WHERE inventory_id = item_inventory_id;
+	DELETE FROM inventory WHERE inventory_id = item_inventory_id;
 
-INSERT INTO equipped (character_id, item_id) VALUES (new_character, new_item);
+	INSERT INTO equipped (character_id, item_id) VALUES (new_character, new_item);
 END;;
 
 
 CREATE PROCEDURE unequip (item_equipped_id INT UNSIGNED)
 BEGIN
-DECLARE item INT UNSIGNED;
-DECLARE id_character INT UNSIGNED;
-DECLARE new_item INT UNSIGNED;
-DECLARE new_character INT UNSIGNED;
+	DECLARE item INT UNSIGNED;
+	DECLARE id_character INT UNSIGNED;
+	
 
-SELECT item_id INTO item
-FROM equipped
-WHERE equipped_id = item_equipped_id;
-
-SELECT item_id INTO new_item
-FROM items 
-WHERE item_id = item;
-
-SELECT character_id INTO id_character
-FROM equipped
-WHERE equipped_id = item_equipped_id;
-
-SELECT character_id INTO new_character
-FROM characters 
-WHERE character_id = id_character;
-
-DELETE FROM equipped WHERE equipped_id = item_equipped_id;
+	SELECT character_id, item_id INTO id_character, item
+	FROM equipped
+	WHERE equipped_id = item_equipped_id;
 
 
-INSERT INTO inventory (character_id, item_id) VALUES (new_character,new_item );
+
+	DELETE FROM equipped WHERE equipped_id = item_equipped_id;
+
+
+	INSERT INTO inventory (character_id, item_id) VALUES (new_character,new_item );
 
 
 END;;
@@ -279,44 +268,44 @@ CREATE PROCEDURE set_winners(id_team INT UNSIGNED)
 BEGIN
 
 
-DECLARE id INT UNSIGNED;
-DECLARE character_name VARCHAR(30);
-DECLARE row_not_found TINYINT DEFAULT FALSE;
+	DECLARE id INT UNSIGNED;
+	DECLARE character_name VARCHAR(30);
+	DECLARE row_not_found TINYINT DEFAULT FALSE;
 
 
 
-DECLARE team_cursor CURSOR FOR
-SELECT c.character_id, c.name
-FROM team_members t
-INNER JOIN characters c
-ON t.character_id = c.character_id
-WHERE t.team_id = id_team;
+	DECLARE team_cursor CURSOR FOR
+	SELECT c.character_id, c.name
+	FROM team_members t
+		INNER JOIN characters c
+		ON t.character_id = c.character_id
+	WHERE t.team_id = id_team;
 
 
-DECLARE CONTINUE HANDLER FOR NOT FOUND
-SET row_not_found = TRUE;
+	DECLARE CONTINUE HANDLER FOR NOT FOUND
+	SET row_not_found = TRUE;
 
 
-DELETE FROM winners;
+	DELETE FROM winners;
 
-OPEN team_cursor;
-character_loop : LOOP
+	OPEN team_cursor;
+	character_loop : LOOP
 
-FETCH team_cursor INTO id, character_name;
+		FETCH team_cursor INTO id, character_name;
 
-IF row_not_found THEN
-LEAVE character_loop;
-END IF;
+		IF row_not_found THEN
+			LEAVE character_loop;
+		END IF;
 
-INSERT INTO winners
-(character_id , name)
-VALUES
-(id, character_name);
+		INSERT INTO winners
+		(character_id , name)
+		VALUES
+		(id, character_name);
 
-END LOOP character_loop;
+	END LOOP character_loop;
 
 
-CLOSE team_cursor;
+	CLOSE team_cursor;
 
 
 
