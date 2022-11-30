@@ -79,3 +79,8 @@ CREATE TABLE notifications (
 );
 
 
+CREATE OR REPLACE VIEW notification_posts AS
+	SELECT u.user_id, u.first_name, u.last_name, p.post_id, p.content
+	FROM users u
+		LEFT OUTER JOIN posts p
+		ON u.user_id = p.user_id;
