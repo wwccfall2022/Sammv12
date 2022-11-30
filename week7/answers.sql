@@ -239,7 +239,7 @@ BEGIN
 
 	DELETE FROM inventory WHERE inventory_id = item_inventory_id;
 
-	INSERT INTO equipped (character_id, item_id) VALUES (new_character, new_item);
+	INSERT INTO equipped (character_id, item_id) VALUES (id_character, item);
 END;;
 
 
@@ -258,7 +258,7 @@ BEGIN
 	DELETE FROM equipped WHERE equipped_id = item_equipped_id;
 
 
-	INSERT INTO inventory (character_id, item_id) VALUES (new_character,new_item );
+	INSERT INTO inventory (character_id, item_id) VALUES (id_character,item );
 
 
 END;;
