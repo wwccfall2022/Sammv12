@@ -160,25 +160,25 @@ CREATE OR REPLACE VIEW character_items AS
      
      
 DELIMITER ;;
-	CREATE FUNCTION armor_total(id INT UNSIGNED)
+CREATE FUNCTION armor_total(id INT UNSIGNED)
 	RETURNS INT UNSIGNED 
 	DETERMINISTIC 
-	BEGIN 
-    DEClARE character_armor INT UNSIGNED;
-    DEClARE equipped_armor INT UNSIGNED;
-	DECLARE total_armor INT UNSIGNED;
+BEGIN 
+	DEClARE character_armor INT UNSIGNED;
+	DEClARE equipped_armor INT UNSIGNED;
+	
     
 	SELECT armor  INTO character_armor
 	FROM character_stats 
-    WHERE character_id = id;
-  
-    SELECT SUM(i.armor) INTO equipped_armor 
-    FROM items i
+	WHERE character_id = id;
+	
+	SELECT SUM(i.armor) INTO equipped_armor 
+	FROM items i
 	LEFT OUTER JOIN equipped e
 	ON e.item_id = i.item_id
 	WHERE e.character_id = id;
     	
-    SET total_armor = character_armor + equipped_armor;
+ 	RETURN character_armor + equipped_armor;
     	RETURN total_armor;
 
 	END;; 
