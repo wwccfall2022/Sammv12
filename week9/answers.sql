@@ -100,9 +100,9 @@ CREATE TRIGGER insert_post
         (NEW.user_id, CONCAT(NEW.first_name, " ", NEW.last_name , " just joined!"));
         
 	INSERT INTO notifications
-        ( post_id)
+        ( user_id, post_id)
         VALUES 
-        (LAST_INSERT_ID());
+        (LAST_INSERT_ID(), LAST_INSERT_ID());
 	END;;
        
 	
