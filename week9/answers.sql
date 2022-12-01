@@ -101,7 +101,7 @@ CREATE TRIGGER insert_notification
         (user_id, post_id)
         VALUES 
         (NEW.user_id, NEW.post_id);
-	END
+	END;;
 
 DELIMITER ;
 
