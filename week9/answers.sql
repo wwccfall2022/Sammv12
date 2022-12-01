@@ -88,7 +88,7 @@ CREATE OR REPLACE VIEW notification_posts AS
 
 DELIMITER ;;
 -- When a new user is added, create a notification for everyone that states "{first_name} {last_name} just joined!" (for example: "Jeromy Streets just joined!").``
-CREATE TRIGGER insert_notification
+CREATE TRIGGER insert_post
 	AFTER INSERT ON users
     FOR EACH ROW
 	BEGIN 
