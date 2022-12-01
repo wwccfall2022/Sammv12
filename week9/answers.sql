@@ -97,6 +97,14 @@ CREATE TRIGGER insert_notification
         VALUES
         (NEW.user_id, NEW.first_name + NEW.last_name + " just joined");
         
+       
+	END;;
+	
+    CREATE TRIGGER insert_notification
+	AFTER INSERT ON posts
+    FOR EACH ROW
+	BEGIN 
+	
         INSERT INTO notifications
         (user_id, post_id)
         VALUES 
