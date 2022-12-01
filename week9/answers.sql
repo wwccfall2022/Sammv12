@@ -80,11 +80,13 @@ CREATE TABLE notifications (
 
 
 CREATE OR REPLACE VIEW notification_posts AS
-	SELECT u.user_id, u.first_name, u.last_name, p.post_id, p.content
+	SELECT n.user_id, u.first_name, u.last_name, p.post_id, p.content
 	FROM users u
-		LEFT OUTER JOIN posts p
-		ON u.user_id = p.user_id;
-
+	LEFT OUTER JOIN posts p
+	ON u.user_id = p.user_id
+	LEFT OUTER JOIN notifications n
+   	ON p.post_id = n.post_id;
+    
 
 DELIMITER ;;
 -- When a new user is added, create a notification for everyone that states "{first_name} {last_name} just joined!" (for example: "Jeromy Streets just joined!").``
