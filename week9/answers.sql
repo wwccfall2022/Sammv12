@@ -92,24 +92,20 @@ CREATE TRIGGER insert_post
 	AFTER INSERT ON users
     FOR EACH ROW
 	BEGIN 
-		INSERT INTO posts
+	INSERT INTO posts
         (user_id, content)
         VALUES
-        (NEW.user_id, NEW.first_name + NEW.last_name + " just joined");
+        (NEW.user_id, CONCAT(NEW.first_name, " ", NEW.last_name , " just joined!"));
         
-       
-	END;;
-	
-    CREATE TRIGGER insert_notification
-	AFTER INSERT ON posts
-    FOR EACH ROW
-	BEGIN 
-	
-        INSERT INTO notifications
+	INSERT INTO notifications
         (user_id, post_id)
         VALUES 
         (NEW.user_id, NEW.post_id);
 	END;;
+       
+	
+
+       
 
 DELIMITER ;
 
