@@ -84,3 +84,30 @@ CREATE OR REPLACE VIEW notification_posts AS
 	FROM users u
 		LEFT OUTER JOIN posts p
 		ON u.user_id = p.user_id;
+
+
+DELIMITER ;;
+-- When a new user is added, create a notification for everyone that states "{first_name} {last_name} just joined!" (for example: "Jeromy Streets just joined!").``
+CREATE TRIGGER insert_notification
+	AFTER INSERT ON users
+    FOR EACH ROW
+	BEGIN 
+		INSERT INTO posts
+        (user_id, content)
+        VALUES
+        (NEW.user_id, NEW.first_name + NEW.last_name + " just joined");
+        
+        INSERT INTO notifications
+        (user_id, post_id)
+        VALUES 
+        (NEW.user_id, NEW.post_id);
+	END
+
+DELIMITER ;
+
+
+
+
+
+
+
