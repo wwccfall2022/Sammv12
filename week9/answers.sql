@@ -99,7 +99,7 @@ CREATE TRIGGER insert_post
     DECLARE row_not_found TINYINT DEFAULT FALSE;
     
 	DECLARE user_cursor CURSOR FOR 
-	SELECT user_id FROM posts WHERE user_id <> NEW.user_id 
+	SELECT user_id FROM users WHERE user_id <> NEW.user_id 
 	GROUP BY user_id;
     
 	DECLARE CONTINUE HANDLER FOR NOT FOUND
