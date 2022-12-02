@@ -103,7 +103,7 @@ CREATE TRIGGER insert_post
 	INSERT INTO notifications
         ( user_id, post_id)
         VALUES 
-        ((SELECT user_id FROM user) , LAST_INSERT_ID());
+        ((SELECT user_id FROM users) , LAST_INSERT_ID());
 	END;;
        
 	
