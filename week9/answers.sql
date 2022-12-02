@@ -105,28 +105,28 @@ CREATE TRIGGER insert_post
 	DECLARE CONTINUE HANDLER FOR NOT FOUND
 		SET row_not_found = TRUE;
 		
+	
+	OPEN user_cursor;
+   	id_loop : LOOP
+    
+
+    	FETCH user_cursor INTO id;
+    	IF row_not_found THEN
+   	 LEAVE id_loop;
+   	 END IF;
+    
 	INSERT INTO posts
         (user_id, content)
         VALUES
         (NEW.user_id, CONCAT(NEW.first_name, " ", NEW.last_name , " just joined!"));
         
-	OPEN user_cursor;
-   	id_loop : LOOP
-    
-
-    FETCH user_cursor INTO id;
-    IF row_not_found THEN
-    LEAVE id_loop;
-    END IF;
-    
-	
    
 	
 	INSERT INTO notifications
         ( user_id, post_id)
         VALUES 
         
-        (id  , LAST_INSERT_ID());
+        (id , LAST_INSERT_ID());
 	END LOOP;
     
     	CLOSE user_cursor;
