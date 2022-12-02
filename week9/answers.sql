@@ -143,7 +143,12 @@ CREATE TRIGGER insert_post
 	END;;
 
 	
-
+CREATE EVENT remove_sessions
+	ON SCHEDULE EVERY 10 SECOND
+    DO 
+    BEGIN 
+		DELETE FROM sessions WHERE updated_on < DATE_SUB(NOW(), INTERVAL 2 HOUR);
+	END;;
        
 
 DELIMITER ;
