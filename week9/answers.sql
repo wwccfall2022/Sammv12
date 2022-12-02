@@ -95,17 +95,41 @@ CREATE TRIGGER insert_post
 	AFTER INSERT ON users
     FOR EACH ROW
 	BEGIN 
+    DECLARE id INT UNSIGNED;
+    DECLARE row_not_found TINYINT DEFAULT FALSE;
+    
+	DECLARE user_cursor CURSOR FOR 
+	SELECT user_id FROM users WHERE user_id <> NEW.user_id 
+	GROUP BY user_id;
+    
+	DECLARE CONTINUE HANDLER FOR NOT FOUND
+		SET row_not_found = TRUE;
+        
+	OPEN user_cursor;
+    id_loop : LOOP
+    
+
+    FETCH user_cursor INTO id;
+    IF row_not_found THEN
+    LEAVE id_loop;
+    END IF;
+    
 	INSERT INTO posts
         (user_id, content)
         VALUES
         (NEW.user_id, CONCAT(NEW.first_name, " ", NEW.last_name , " just joined!"));
-        
+   
+	
 	INSERT INTO notifications
         ( user_id, post_id)
         VALUES 
-        ((SELECT user_id FROM users WHERE user_id <> NEW.user_id GROUP BY user_id ) , LAST_INSERT_ID());
+        
+        (id  , LAST_INSERT_ID());
+	END LOOP;
+    
+    CLOSE user_cursor;
 	END;;
-       
+
 	
 
        
