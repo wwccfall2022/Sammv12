@@ -96,10 +96,13 @@ CREATE TRIGGER insert_post
     FOR EACH ROW
 	BEGIN 
     DECLARE id INT UNSIGNED;
+    DECLARE id_post INT UNSIGNED;
     DECLARE row_not_found TINYINT DEFAULT FALSE;
     
 	DECLARE user_cursor CURSOR FOR 
-	SELECT user_id FROM users WHERE user_id <> NEW.user_id 
+	SELECT user_id 
+	FROM users 
+	WHERE user_id <> NEW.user_id 
 	GROUP BY user_id;
     
 	DECLARE CONTINUE HANDLER FOR NOT FOUND
@@ -111,6 +114,9 @@ CREATE TRIGGER insert_post
         (user_id, content)
         VALUES
         (NEW.user_id, CONCAT(NEW.first_name, " ", NEW.last_name , " just joined!"));
+	
+	SET id_post = LAST_INSERT_ID();
+	
 	
 	
 	OPEN user_cursor;
@@ -130,7 +136,7 @@ CREATE TRIGGER insert_post
         ( user_id, post_id)
         VALUES 
         
-        (id , LAST_INSERT_ID());
+        (id , id_post);
 	END LOOP;
     
     	CLOSE user_cursor;
