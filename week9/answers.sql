@@ -106,6 +106,13 @@ CREATE TRIGGER insert_post
 		SET row_not_found = TRUE;
 		
 	
+	
+	INSERT INTO posts
+        (user_id, content)
+        VALUES
+        (NEW.user_id, CONCAT(NEW.first_name, " ", NEW.last_name , " just joined!"));
+	
+	
 	OPEN user_cursor;
    	id_loop : LOOP
     
@@ -115,10 +122,7 @@ CREATE TRIGGER insert_post
    	 LEAVE id_loop;
    	 END IF;
     
-	INSERT INTO posts
-        (user_id, content)
-        VALUES
-        (NEW.user_id, CONCAT(NEW.first_name, " ", NEW.last_name , " just joined!"));
+	
         
    
 	
