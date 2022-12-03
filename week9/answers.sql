@@ -153,11 +153,11 @@ CREATE EVENT remove_sessions
       
       
       
-CREATE PROCEDURE add_post(user_id INT UNSIGNED, content VARCHAR(50))
+CREATE PROCEDURE add_post(user_id INT UNSIGNED, content VARCHAR(100))
 BEGIN 
 
 DECLARE id_user INT UNSIGNED;
-DECLARE post_content VARCHAR(50);
+DECLARE post_content VARCHAR(100);
 DECLARE friend_id INT UNSIGNED;
 DECLARE user_friend_id INT UNSIGNED;
 DECLARE last_id INT UNSIGNED;
