@@ -149,7 +149,62 @@ CREATE EVENT remove_sessions
     BEGIN 
 		DELETE FROM sessions WHERE updated_on < DATE_SUB(NOW(), INTERVAL 2 HOUR);
 	END;;
-       
+      
+      
+      
+      
+CREATE PROCEDURE add_post(user_id INT UNSIGNED, content VARCHAR(50))
+BEGIN 
+
+DECLARE id_user INT UNSIGNED;
+DECLARE post_content VARCHAR(50);
+DECLARE friend_id INT UNSIGNED;
+DECLARE user_friend_id INT UNSIGNED;
+DECLARE last_id INT UNSIGNED;
+DECLARE row_not_found TINYINT DEFAULT FALSE;
+
+
+
+
+DECLARE friend_cursor CURSOR FOR 
+SELECT friend_id FROM friends
+WHERE user_id = id_user
+GROUP BY user_id;
+
+
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND
+SET row_not_found = TRUE;
+  
+SET id_user = user_id;
+SET post_content = content;
+
+INSERT INTO posts
+(user_id, content)
+VALUES 
+(id_user, content);
+
+
+SET last_id = LAST_INSERT_ID();
+
+OPEN friend_cursor;
+   	id_loop : LOOP
+    
+
+	FETCH friend_cursor INTO user_friend_id;
+	IF row_not_found THEN
+	LEAVE id_loop;
+	END IF;
+    
+	INSERT INTO notifications
+        ( user_id, post_id)
+        VALUES 
+        
+        (user_friend_id, last_id);
+	END LOOP;
+    
+    	CLOSE friend_cursor;
+	END;;
 
 DELIMITER ;
 
