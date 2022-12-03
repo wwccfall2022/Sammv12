@@ -156,8 +156,6 @@ CREATE EVENT remove_sessions
 CREATE PROCEDURE add_post(user_id INT UNSIGNED, content VARCHAR(100))
 BEGIN 
 
-DECLARE id_user INT UNSIGNED;
-DECLARE post_content VARCHAR(100);
 DECLARE friend_id INT UNSIGNED;
 DECLARE user_friend_id INT UNSIGNED;
 DECLARE last_id INT UNSIGNED;
@@ -168,7 +166,7 @@ DECLARE row_not_found TINYINT DEFAULT FALSE;
 
 DECLARE friend_cursor CURSOR FOR 
 SELECT friend_id FROM friends
-WHERE user_id = id_user
+WHERE user_id = user_id
 GROUP BY user_id;
 
 
@@ -176,13 +174,12 @@ GROUP BY user_id;
 DECLARE CONTINUE HANDLER FOR NOT FOUND
 SET row_not_found = TRUE;
   
-SET id_user = user_id;
-SET post_content = content;
+
 
 INSERT INTO posts
 (user_id, content)
 VALUES 
-(id_user, content);
+(user_id, content);
 
 
 SET last_id = LAST_INSERT_ID();
