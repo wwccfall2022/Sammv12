@@ -169,7 +169,7 @@ DECLARE row_not_found TINYINT DEFAULT FALSE;
 DECLARE friend_cursor CURSOR FOR 
 
 SELECT friend_id FROM friends
-WHERE user_id = id_user
+WHERE user_id = user_id
 GROUP BY friend_id;
 
 
