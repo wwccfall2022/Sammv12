@@ -169,7 +169,7 @@ DECLARE friend_cursor CURSOR FOR
 
 SELECT friend_id FROM friends
 WHERE user_id = id_user
-GROUP BY friend_id;
+;
 
 
 
