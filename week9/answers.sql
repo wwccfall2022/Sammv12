@@ -7,7 +7,7 @@ CREATE TABLE users (
 	first_name VARCHAR(30) NOT NULL ,
 	last_name VARCHAR(30) NOT NULL,
 	email VARCHAR(50) NOT NULL,
-    created_on TIMESTAMP NOT NULL DEFAULT NOW()
+	created_on TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 
@@ -36,7 +36,7 @@ CREATE TABLE friends (
 		REFERENCES users(user_id)
         	ON UPDATE CASCADE
         	ON DELETE CASCADE,
-  -- I added thr name of the contrain frienduser because it keep giving me and erro arbout repiting a constrain but this constraint refers to the user table      
+  -- I added the name of the contrain frienduser because it keep giving me and error about repiting a constraint but this constraint refers to the user table      
 	CONSTRAINT friends_fk_friendusers
 		FOREIGN KEY (friend_id)
 		REFERENCES users(user_id)
@@ -50,7 +50,7 @@ CREATE TABLE posts (
 	user_id INT UNSIGNED NOT NULL,
 	created_on TIMESTAMP NOT NULL DEFAULT NOW(),
 	updated_on TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE NOW(),
-    content VARCHAR(100) NOT NULL,
+	content VARCHAR(100) NOT NULL,
 	
 	CONSTRAINT posts_fk_users
 		FOREIGN KEY (user_id)
@@ -92,20 +92,22 @@ DELIMITER ;;
 -- When a new user is added, create a notification for everyone that states "{first_name} {last_name} just joined!" (for example: "Jeromy Streets just joined!").``
 
 CREATE TRIGGER insert_post
+
 	AFTER INSERT ON users
-    FOR EACH ROW
+	FOR EACH ROW
 	BEGIN 
-    DECLARE id INT UNSIGNED;
-    DECLARE id_post INT UNSIGNED;
-    DECLARE row_not_found TINYINT DEFAULT FALSE;
+	
+	DECLARE id INT UNSIGNED;
+    	DECLARE id_post INT UNSIGNED;
+    	DECLARE row_not_found TINYINT DEFAULT FALSE;
     
 	DECLARE user_cursor CURSOR FOR 
-	SELECT user_id 
-	FROM users 
-	WHERE user_id <> NEW.user_id;
+		SELECT user_id 
+		FROM users 
+		WHERE user_id <> NEW.user_id;
     
 	DECLARE CONTINUE HANDLER FOR NOT FOUND
-		SET row_not_found = TRUE;
+	SET row_not_found = TRUE;
 		
 	
 	
@@ -124,8 +126,8 @@ CREATE TRIGGER insert_post
 
     	FETCH user_cursor INTO id;
     	IF row_not_found THEN
-   	LEAVE id_loop;
-   	 END IF;
+   		LEAVE id_loop;
+   	END IF;
     
 	
         
@@ -134,69 +136,73 @@ CREATE TRIGGER insert_post
 	INSERT INTO notifications
         ( user_id, post_id)
         VALUES 
-        
         (id , id_post);
+	
 	END LOOP id_loop;
     
     	CLOSE user_cursor;
 	END;;
-
 	
+
+-- Every 10 seconds, remove all sessions that haven't been updated in the last 2 hours.
+
 CREATE EVENT remove_sessions
+
 	ON SCHEDULE EVERY 10 SECOND
-    DO 
-    BEGIN 
+    	DO 
+    	BEGIN 
 		DELETE FROM sessions WHERE updated_on < DATE_SUB(NOW(), INTERVAL 2 HOUR);
 	END;;
       
       
       
-      
+-- Create a procedure that adds a post and creates notifications for all of the user's friends.
+
 CREATE PROCEDURE add_post(id_user INT UNSIGNED, post_content VARCHAR(100))
-BEGIN 
+	
+	BEGIN 
 
-
-DECLARE user_friend_id INT UNSIGNED;
-DECLARE last_id INT UNSIGNED;
-DECLARE row_not_found TINYINT DEFAULT FALSE;
-
-
-
-
-DECLARE friend_cursor CURSOR FOR 
-
-SELECT friend_id FROM friends
-WHERE user_id = id_user;
+	DECLARE user_friend_id INT UNSIGNED;
+	DECLARE last_id INT UNSIGNED;
+	DECLARE row_not_found TINYINT DEFAULT FALSE;
 
 
 
-DECLARE CONTINUE HANDLER FOR NOT FOUND
-SET row_not_found = TRUE;
+
+	DECLARE friend_cursor CURSOR FOR 
+		SELECT friend_id FROM friends
+		WHERE user_id = id_user;
+
+
+
+	DECLARE CONTINUE HANDLER FOR NOT FOUND
+	SET row_not_found = TRUE;
   
 
 
 
-INSERT INTO posts
-(user_id, content)
-VALUES 
-(id_user, post_content);
+	INSERT INTO posts
+	(user_id, content)
+	VALUES 
+	(id_user, post_content);
 
 
-SET last_id = LAST_INSERT_ID();
+	SET last_id = LAST_INSERT_ID();
 
-OPEN friend_cursor;
-   	id_loop : LOOP
+	OPEN friend_cursor;
+   		id_loop : LOOP
     
 
-	FETCH friend_cursor INTO user_friend_id;
-	IF row_not_found THEN
-	LEAVE id_loop;
-	END IF;
+		FETCH friend_cursor INTO user_friend_id;
+		IF row_not_found THEN
+			LEAVE id_loop;
+		END IF;
     
 	INSERT INTO notifications
         ( user_id, post_id)
         VALUES 
         (user_friend_id, last_id);
+	
 	END LOOP id_loop;
     
     	CLOSE friend_cursor;
