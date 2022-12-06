@@ -198,7 +198,7 @@ OPEN friend_cursor;
         ( user_id, post_id)
         VALUES 
         (user_friend_id, last_id);
-	END LOOP;
+	END LOOP id_loop;
     
     	CLOSE friend_cursor;
 	END;;
