@@ -102,8 +102,7 @@ CREATE TRIGGER insert_post
 	DECLARE user_cursor CURSOR FOR 
 	SELECT user_id 
 	FROM users 
-	WHERE user_id <> NEW.user_id 
-	GROUP BY user_id;
+	WHERE user_id <> NEW.user_id;
     
 	DECLARE CONTINUE HANDLER FOR NOT FOUND
 		SET row_not_found = TRUE;
@@ -168,8 +167,7 @@ DECLARE row_not_found TINYINT DEFAULT FALSE;
 DECLARE friend_cursor CURSOR FOR 
 
 SELECT friend_id FROM friends
-WHERE user_id = id_user
-;
+WHERE user_id = id_user;
 
 
 
