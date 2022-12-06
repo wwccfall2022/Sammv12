@@ -124,7 +124,7 @@ CREATE TRIGGER insert_post
 
     	FETCH user_cursor INTO id;
     	IF row_not_found THEN
-   	 LEAVE id_loop;
+   	LEAVE id_loop;
    	 END IF;
     
 	
@@ -136,7 +136,7 @@ CREATE TRIGGER insert_post
         VALUES 
         
         (id , id_post);
-	END LOOP;
+	END LOOP id_loop;
     
     	CLOSE user_cursor;
 	END;;
